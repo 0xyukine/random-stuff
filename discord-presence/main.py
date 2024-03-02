@@ -1,4 +1,5 @@
 from pypresence import Presence
+import threading
 import time
 import json
 
@@ -7,7 +8,7 @@ with open('config.json', 'r') as config:
 ID = config['id']
 
 start_time=time.time()
-delay=12*60*60
+delay=0#12*60*60
 
 default = {
     "pid":None,
@@ -52,14 +53,20 @@ elif res == "N":
 else:
     pass
 
-print(default)
-print(pres)
-print(ID)
+def presence():
+    global ID
+    global pres
+    print(ID)
+    print(pres)
+    client_id = ID
+    RPC = Presence(client_id)
+    RPC.connect()
+    while True:
+        RPC.update(**pres)
+        time.sleep(15)
 
-client_id = ID
-RPC = Presence(client_id)
-RPC.connect()
-RPC.update(**pres)
+x = threading.Thread(target=presence)
+x.start()
 
 while True:
-    time.sleep(15)
+    time.sleep(1)
