@@ -10,6 +10,8 @@ ID = config['id']
 start_time=time.time()
 delay=0#12*60*60
 
+keys = ["pid","state","details","start","end","large_image","large_text","small_image","small_text","party_id","party_size","join","spectate","match","buttons"]
+
 default = {
     "pid":None,
     "state":"68 69 66 75 6D 69",
@@ -69,4 +71,9 @@ x = threading.Thread(target=presence)
 x.start()
 
 while True:
-    time.sleep(1)
+    x = input()
+    y = x.split(",")[0].strip(), x.split(",")[1].strip()
+    if y[0] in keys:
+        pres[y[0]] = y[1]
+    else:
+        print("Invalid key")
