@@ -109,3 +109,32 @@ while True:
 
 print("waiting to close program")
 input()
+
+class PresenceThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self._running = True
+        signal.signal(signal.SIGINT, self.stop)
+        signal.signal(signal.SIGTERM, self.stop)
+    
+    def stop(self, signum=None, frame=None):
+        print(signum, frame)
+        self._running = False
+    
+    def run(self):
+        global ID
+        global pres
+
+        RPC = Presence(ID)
+        RPC.connect()
+        while self._running:
+            RPC.update(**pres)
+            time.sleep(15)
+        RPC.close()
+
+if __name__ == "__main__":
+    try:
+        p = PresenceThread()
+        p.start()
+    except Exception as e:
+        pass
