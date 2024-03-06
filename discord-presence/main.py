@@ -9,7 +9,7 @@ with open('config.json', 'r') as config:
     config = json.load(config)
 ID = config['id']
 
-alive = True
+# alive = True
 
 start_time=time.time()
 delay=0#12*60*60
@@ -37,7 +37,8 @@ default = {
 pres = default
 
 print("Update default fields: Y/N")
-res = input()
+# res = input()
+res = "N"
 
 if res == "Y":
     print("Load from file")
@@ -59,22 +60,22 @@ elif res == "N":
 else:
     pass
 
-def presence():
-    global ID
-    global pres
-    global alive
-    print(ID)
-    print(pres)
-    client_id = ID
-    RPC = Presence(client_id)
-    RPC.connect()
-    while alive:
-        RPC.update(**pres)
-        time.sleep(15)
-    RPC.close()
+# def presence():
+#     global ID
+#     global pres
+#     global alive
+#     print(ID)
+#     print(pres)
+#     client_id = ID
+#     RPC = Presence(client_id)
+#     RPC.connect()
+#     while alive:
+#         RPC.update(**pres)
+#         time.sleep(15)
+#     RPC.close()
 
-x = threading.Thread(target=presence)
-x.start()
+# x = threading.Thread(target=presence)
+# x.start()
 
 def signal_int(sig, frame):
     print("Ctrl-C received, int, killing thread")
@@ -86,32 +87,30 @@ def signal_term(sig, frame):
     global alive
     alive = False
 
-signal.signal(signal.SIGINT, signal_int)
-signal.signal(signal.SIGTERM, signal_term)
+# while True:
+#     try:
+#         print("a")
+#         x = input()
+#         y = x.split(",")[0].strip(), x.split(",")[1].strip()
+#         if y[0] in keys:
+#             pres[y[0]] = y[1]
+#         else:
+#             print("Invalid key")
+#     except Exception as e:
+#         print(e)
+#         print("break loop?")
+#         x = input()
+#         if x == "Y":
+#             break
+#         else:
+#             pass
 
-while True:
-    try:
-        print("a")
-        x = input()
-        y = x.split(",")[0].strip(), x.split(",")[1].strip()
-        if y[0] in keys:
-            pres[y[0]] = y[1]
-        else:
-            print("Invalid key")
-    except Exception as e:
-        print(e)
-        print("break loop?")
-        x = input()
-        if x == "Y":
-            break
-        else:
-            pass
-
-print("waiting to close program")
-input()
+# print("waiting to close program")
+# input()
 
 class PresenceThread(threading.Thread):
     def __init__(self):
+        print("Initiating thread")
         threading.Thread.__init__(self)
         self._running = True
         signal.signal(signal.SIGINT, self.stop)
@@ -132,9 +131,17 @@ class PresenceThread(threading.Thread):
             time.sleep(15)
         RPC.close()
 
+def main():
+    print("main")
+    p = PresenceThread()
+    p.start()
+    print("focus returned to main")
+    input()
+    print("blah")
+    input()
+
 if __name__ == "__main__":
     try:
-        p = PresenceThread()
-        p.start()
+        main()
     except Exception as e:
         pass
