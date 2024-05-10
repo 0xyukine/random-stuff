@@ -21,7 +21,6 @@ http.createServer(function (req, res) {
     getAuthToken();
 }).listen(3000);
 
-
 // Fetches access token
 async function getAuthToken() {
     const url = "https://id.twitch.tv/oauth2/token";
