@@ -60,23 +60,6 @@ elif res == "N":
 else:
     pass
 
-# def presence():
-#     global ID
-#     global pres
-#     global alive
-#     print(ID)
-#     print(pres)
-#     client_id = ID
-#     RPC = Presence(client_id)
-#     RPC.connect()
-#     while alive:
-#         RPC.update(**pres)
-#         time.sleep(15)
-#     RPC.close()
-
-# x = threading.Thread(target=presence)
-# x.start()
-
 def signal_int(sig, frame):
     print("Ctrl-C received, int, killing thread")
     global alive
@@ -124,12 +107,13 @@ class PresenceThread(threading.Thread):
         global ID
         global pres
 
-        RPC = Presence(ID)
-        RPC.connect()
         while self._running:
-            RPC.update(**pres)
-            time.sleep(15)
-        RPC.close()
+            RPC = Presence(ID)
+            RPC.connect()
+            while self._running:
+                RPC.update(**pres)
+                time.sleep(15)
+            RPC.close()
 
 def main():
     print("main")
