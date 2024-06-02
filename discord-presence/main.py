@@ -70,27 +70,6 @@ def signal_term(sig, frame):
     global alive
     alive = False
 
-# while True:
-#     try:
-#         print("a")
-#         x = input()
-#         y = x.split(",")[0].strip(), x.split(",")[1].strip()
-#         if y[0] in keys:
-#             pres[y[0]] = y[1]
-#         else:
-#             print("Invalid key")
-#     except Exception as e:
-#         print(e)
-#         print("break loop?")
-#         x = input()
-#         if x == "Y":
-#             break
-#         else:
-#             pass
-
-# print("waiting to close program")
-# input()
-
 class PresenceThread(threading.Thread):
     def __init__(self):
         print("Initiating thread")
@@ -116,12 +95,29 @@ class PresenceThread(threading.Thread):
             RPC.close()
 
 def main():
-    print("main")
+    print("Starting prescence thread")
     p = PresenceThread()
     p.start()
-    print("focus returned to main")
-    input()
-    print("blah")
+
+    while True:
+        try:
+            print("Update prescence key-value pair:", end=" ")
+            x = input()
+            y = x.split(",")[0].strip(), x.split(",")[1].strip()
+            if y[0] in keys:
+                pres[y[0]] = y[1]
+            else:
+                print("Invalid key")
+        except Exception as e:
+            print(e)
+            print("break loop?")
+            x = input()
+            if x == "Y":
+                break
+            else:
+                pass
+
+    print("waiting to close program")
     input()
 
 if __name__ == "__main__":
