@@ -16,7 +16,6 @@ def create_directory(name):
     except FileNotFoundError as e:
         print("Subdirectory does not exist")
 
-
 def list_dir(path, desc=""):
     if desc:
         print(desc)
@@ -28,8 +27,15 @@ def list_dir(path, desc=""):
         print(f"{count}: {item}")
         count+=1
 
-for item in os.listdir("/input"):
-    create_directory(item)
+def get_dir(path):
+    
+    for dirpath,dirnames,filenames in os.walk(path):
+        print(dirpath,dirnames,filenames)
+
+get_dir("/input")
+
+# for item in os.listdir("/input"):
+#     create_directory(item)
 
 # list_dir("/videos")
 # list_dir("/input", "Input directory:")
