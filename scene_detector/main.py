@@ -15,6 +15,8 @@ def create_directory(name):
         print("Directory exists")
     except FileNotFoundError as e:
         print("Subdirectory does not exist")
+    
+    return f"/frames/{name}"
 
 def list_dir(path, desc=""):
     if desc:
@@ -25,14 +27,12 @@ def list_dir(path, desc=""):
     for item in dir_list:
         item = clean_name(item)
         print(f"{count}: {item}")
-        count+=1
+        count += 1
 
 def get_dir(path):
-    
     for dirpath,dirnames,filenames in os.walk(path):
-        print(dirpath,dirnames,filenames)
-
-get_dir("/input")
+        for file in filenames:
+            yield (os.path.abspath(os.path.join(dirpath,file)))
 
 # for item in os.listdir("/input"):
 #     create_directory(item)
@@ -40,3 +40,22 @@ get_dir("/input")
 # list_dir("/videos")
 # list_dir("/input", "Input directory:")
 # list_dir("/frames")
+
+for video in get_dir('/input'):
+    print(video)
+    output_dir = create_directory(os.path.basename(video))
+    
+    vc = cv2.VideoCapture(video)
+    fps = vc.get(cv2.CAP_PROP_FPS)
+    print(round(fps))
+    input()
+    success,image = vc.read()
+    count = 0
+    success = True
+    while success:
+        if count % 2 == 0:
+            cv2.imwrite(f"{output_dir}/frame{count}.png",image)
+        success,image = vc.read()
+        count += 1
+    
+    input()
